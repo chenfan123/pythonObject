@@ -1,0 +1,21 @@
+##### 创建虚拟环境
+
+`conda create -n fastapi python=3.10`
+
+##### 激活虚拟环境
+
+`conda activate fastapi`
+
+##### 退出虚拟环境
+
+`conda deactivate`
+
+##### 安装 fastapi
+
+`pip install fastapi`
+
+##### 安装 uvicorn
+
+`pip install uvicorn`
+
+##### 安装 fastapi-cli

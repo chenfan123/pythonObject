@@ -4,7 +4,8 @@ services:
     container_name: learn-postgres
     restart: unless-stopped
     ports:
-      - "5432:5432"
+      # 本机 5432 常被其他容器占用，学习库映射到 5433
+      - "5433:5432"
     environment:
       POSTGRES_USER: learn
       POSTGRES_PASSWORD: learn

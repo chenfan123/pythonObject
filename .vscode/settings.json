@@ -1,7 +1,8 @@
 {
   "python-envs.defaultEnvManager": "ms-python.python:conda",
   "python-envs.defaultPackageManager": "ms-python.python:conda",
-  "python.defaultInterpreterPath": "/opt/anaconda3/envs/myAgent/bin/python",
+  "python.defaultInterpreterPath": "/opt/miniconda3/envs/myAgent/bin/python",
+  "python.analysis.extraPaths": ["${workspaceFolder}/python_fastapi"],
   "python.languageServer": "None",
   "python.pydev.pythonExecutable": "/opt/anaconda3/envs/myAgent/bin/python",
   "python.pydev.forcedBuiltins": ["requests"],

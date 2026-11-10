@@ -1,0 +1,6 @@
+{
+  "venvPath": "/opt/anaconda3/envs",
+  "venv": "myAgent",
+  "pythonVersion": "3.13",
+  "extraPaths": []
+}

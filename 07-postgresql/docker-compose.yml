@@ -18,5 +18,24 @@ services:
       timeout: 5s
       retries: 10
 
+  postgres_test:
+    image: postgres:17-alpine
+    container_name: learn-postgres-test
+    profiles: ["test"]
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: learn
+      POSTGRES_PASSWORD: learn
+      POSTGRES_DB: learn_test_db
+    volumes:
+      - learn_pg_test_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U learn -d learn_test_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
 volumes:
   learn_pg_data:
+  learn_pg_test_data:

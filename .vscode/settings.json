@@ -1,4 +1,9 @@
 {
   "python-envs.defaultEnvManager": "ms-python.python:conda",
-  "python-envs.defaultPackageManager": "ms-python.python:conda"
+  "python-envs.defaultPackageManager": "ms-python.python:conda",
+  "python.defaultInterpreterPath": "/opt/anaconda3/envs/myAgent/bin/python",
+  "python.languageServer": "None",
+  "python.pydev.pythonExecutable": "/opt/anaconda3/envs/myAgent/bin/python",
+  "python.pydev.forcedBuiltins": ["requests"],
+  "cursorpyright.analysis.diagnosticMode": "workspace"
 }

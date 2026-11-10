@@ -2,6 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, Query, Response, status
 
+from app.core.config import get_settings
 from app.dependencies.users import get_user_service
 from app.schemas.user import (
     UserCreateDTO,
@@ -21,7 +22,7 @@ async def list_users(
     keyword: Annotated[str | None, Query(min_length=1, max_length=100)] = None,
     email_domain: Annotated[str | None, Query(min_length=3, max_length=253)] = None,
     offset: Annotated[int, Query(ge=0)] = 0,
-    limit: Annotated[int, Query(ge=1, le=100)] = 20,
+    limit: Annotated[int, Query(ge=1, le=get_settings().max_page_size)] = 20,
 ) -> UserPageDTO:
     users, total = await service.list_users(
         keyword=keyword,

@@ -65,6 +65,14 @@ class FakeUserService:
         if not any(user.id == user_id for user in self._users):
             raise UserNotFoundError()
 
+    async def get_user(self, user_id: int) -> SimpleNamespace:
+        if user_id == 500:
+            raise RuntimeError("database password should never reach the client")
+        user = next((user for user in self._users if user.id == user_id), None)
+        if user is None:
+            raise UserNotFoundError()
+        return user
+
 
 def get_fake_user_service() -> FakeUserService:
     return FakeUserService()
@@ -87,6 +95,27 @@ def test_create_user_returns_public_fields() -> None:
 
     assert response.status_code == 201
     assert response.json() == {"id": 101, "email": "alice@example.com"}
+
+
+def test_request_id_is_returned_to_the_client() -> None:
+    with TestClient(app) as client:
+        response = client.get("/health", headers={"X-Request-ID": "trace-123"})
+
+    assert response.status_code == 200
+    assert response.headers["X-Request-ID"] == "trace-123"
+
+
+def test_unexpected_error_is_safe_and_contains_request_id() -> None:
+    with TestClient(app, raise_server_exceptions=False) as client:
+        response = client.get("/users/500", headers={"X-Request-ID": "trace-500"})
+
+    assert response.status_code == 500
+    assert response.headers["X-Request-ID"] == "trace-500"
+    assert response.json() == {
+        "code": "INTERNAL_SERVER_ERROR",
+        "message": "Internal server error",
+        "request_id": "trace-500",
+    }
 
 
 def test_create_user_duplicate_email_returns_conflict() -> None:

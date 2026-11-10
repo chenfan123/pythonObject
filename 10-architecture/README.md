@@ -25,9 +25,13 @@ python -m pytest -q -m "not integration"
 真实数据库集成测试默认跳过。先执行迁移，再显式提供测试数据库连接：
 
 ```bash
-alembic upgrade head
-export INTEGRATION_DATABASE_URL="$DATABASE_URL"
+cd ../07-postgresql
+docker compose --profile test up -d postgres_test
+
+cd ../10-architecture
+export INTEGRATION_DATABASE_URL="postgresql+asyncpg://learn:learn@127.0.0.1:5433/learn_test_db"
+DATABASE_URL="$INTEGRATION_DATABASE_URL" alembic upgrade head
 python -m pytest -q -m integration
 ```
 
-集成测试使用随机邮箱，并在 `finally` 中删除本次创建的数据；仍应只指向可安全测试的数据库。
+集成测试使用随机邮箱，并在 `finally` 中删除本次创建的数据；仍应只指向专用测试数据库，绝不能指向开发或生产数据库。

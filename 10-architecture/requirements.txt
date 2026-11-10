@@ -3,6 +3,7 @@ uvicorn[standard]
 sqlalchemy[asyncio]>=2.0
 asyncpg
 alembic
+pydantic-settings
 pytest
 pytest-asyncio
 httpx

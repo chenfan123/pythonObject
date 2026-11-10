@@ -1,15 +1,13 @@
-import os
 from collections.abc import AsyncIterator
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
+from app.core.config import get_settings
+
 
 def get_database_url() -> str:
     """配置属于基础设施：源码不保存真实连接密码。"""
-    database_url = os.getenv("DATABASE_URL")
-    if not database_url:
-        raise RuntimeError("DATABASE_URL is required")
-    return database_url
+    return get_settings().database_url
 
 
 # 创建异步引擎:Engine → 应用级数据库连接与连接池管理器

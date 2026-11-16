@@ -40,7 +40,37 @@ RELATION_ORM: Dict = {
     },
     "apps": {
         "models": {
-            "models": ["relation_models", "aerich.models"],
+            "models": ["relation_models1v1"],
+            "default_connection": "default",
+        }
+    },
+    "use_tz": False,
+    "timezone": "UTC",
+}
+
+# 1对多关联练习库（与 relation_db 的 students 表结构不同，单独建库）
+RELATION_ORM_1VMORE: Dict = {
+    "connections": {
+        "default": "postgres://learn:learn@127.0.0.1:5433/relation_db_1vmore",
+    },
+    "apps": {
+        "models": {
+            "models": ["relation_models1vmore"],
+            "default_connection": "default",
+        }
+    },
+    "use_tz": False,
+    "timezone": "UTC",
+}
+
+# 多对多关联练习库（中间表 course_students）
+RELATION_ORM_MORE_V_MORE: Dict = {
+    "connections": {
+        "default": "postgres://learn:learn@127.0.0.1:5433/relation_db_more_v_more",
+    },
+    "apps": {
+        "models": {
+            "models": ["relation_models_more_v_more"],
             "default_connection": "default",
         }
     },

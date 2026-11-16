@@ -191,3 +191,75 @@ Meta 类用于定义模型的元数据，控制表结构和查询行为。常用
 - `unique_together`：定义联合唯一约束（如 `unique_together=[("field1", "field2")]`）
 - `indexes`：定义索引（如 `indexes=[("field1", "field2")]`）
 - `ordering`：默认排序规则（如 `ordering=["-created_at", "username"]`）
+
+### Tortoise-ORM 关联关系
+
+练习文件：
+
+- 1 对 1：`relation_models1v1.py` / 库 `relation_db`
+- 1 对多：`relation_models1vmore.py` / 库 `relation_db_1vmore`
+- 多对多：`relation_models_more_v_more.py` / 库 `relation_db_more_v_more`
+
+#### 1 对 1 关系
+
+- `Student.profile` 使用 `OneToOneField`，指向 `StudentProfile`
+- `on_delete=fields.CASCADE`：删除学生时，关联的资料一并删除
+- `related_name="student"`：反向查询名；可从 `StudentProfile` 通过 `.student` 访问学生
+- 外键实际建在声明 `OneToOneField` 的那一侧（本练习在 `Student` 上 → `students.profile_id`）
+
+#### 1 对多 关系
+
+- `Grade.student` 使用 `ForeignKeyField`，指向 `Student`（外键写在「多」的一方）
+- `related_name="grades"`：反向关系；`Student.grades` 可访问该学生的全部成绩
+- 数据库表现：`grades.student_id` → `students.id`
+
+#### 多对多 关系
+
+两种常见写法：
+
+1. **显式中间表**（本练习采用）：自定义 `CourseStudent`，两端各一个 `ForeignKeyField`
+   - `course_students.course_id` → `courses.id`
+   - `course_students.student_id` → `students.id`
+   - `unique_together=("course", "student")`：同一学生对同一课程只保留一条关联
+2. **ManyToManyField**：在一侧声明，可用 `through=` 指定中间表
+
+图中示意写法：
+
+- `Course.students` 使用 `ManyToManyField`，通过中间表关联
+- `through="grades"` / `through="course_students"`：指定中间表
+- 中间表同时持有两边外键；`unique_together` 避免重复选课/重复成绩记录
+
+#### related_name 小结
+
+| 声明位置                                                               | related_name | 反向访问                        |
+| ---------------------------------------------------------------------- | ------------ | ------------------------------- |
+| `Student.profile = OneToOneField(..., related_name="student")`         | `student`    | `profile.student`               |
+| `Grade.student = ForeignKeyField(..., related_name="grades")`          | `grades`     | `student.grades`                |
+| `CourseStudent.student = ForeignKeyField(..., related_name="courses")` | `courses`    | `student.courses`（中间表记录） |
+| `CourseStudent.course = ForeignKeyField(..., related_name="students")` | `students`   | `course.students`（中间表记录） |
+
+## 中间件
+
+是位于客户端和应用程序核心逻辑之间的软件层，用于：
+
+- 拦截请求和响应
+- 在请求到达路由处理程序之前进行处理
+- 在响应返回给客户端之前进行处理
+
+## 跨域资源共享
+
+### 同源策略（SOP）
+
+由协议、域名和端口组成。如果两个 URL 的协议、域名和端口都相同，则认为它们是同源的。
+
+### CORS 的工作原理
+
+是一种基于 HTTP 的机制，允许服务器指示那些其他源可以访问其资源，从而绕过浏览器的同源策略限制。
+
+## 业务划分
+
+### APIRouter 核心作用
+
+- 模块化组件
+- 路由分组
+- 组织优化

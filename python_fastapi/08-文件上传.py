@@ -38,6 +38,7 @@ def upload_bytes(file: bytes = File(...)):
 
 @app.post("/upload_file")
 async def upload_file(file: UploadFile = File(...)):
+    # wb表示写入二进制文件
     async with aiofiles.open(f'./data/{file.filename}', 'wb') as f:  # 1MB 为单位读取
         # chunk = await file.read(1024 * 1024)  # await 读取数据
         # while chunk:  # 直到读取完为止

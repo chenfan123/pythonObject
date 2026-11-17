@@ -80,7 +80,7 @@
 - 获取请求引用 URL
 - 获取请求 User-Agent
 
-  ## 响应对象 Response
+## 响应对象 Response
 
 - JSON 响应：用于 RESTful API 的数据交互，占主导地位
 - 列表响应：用于分页查询或批量数据返回
